@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,49 +9,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('/blog')->name('blog.')->group(function () {
-    Route::get('/', function (Request $request) {
-        // $post = new Post();
-        // $post->title = 'Mon Second article';
-        // $post->slug = 'mon-second-article';
-        // $post->content = 'mon contenu';
-        // $post->save();
+Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function () {
+    Route::get('/','index')->name('index');
 
-        // $posts = Post::find(1);
-        // $posts->title = 'Nouveau Titre';
-        // $posts->delete();
+    // Route::get('/{slug}-{id}', function (string $slug, string $id, $request) {
 
-        $posts = Post::create([
-            'title' => 'Mon nouveau titre',
-            'slug' => 'nouveau titre test',
-            'content' => 'Nouveauc contenu'
-        ]);
-        dd($posts);
+    //     // return [
+    //     //     "slug" => $slug,
+    //     //     "id" => $id,
+    //     //     "name" => $request->input("name"),
+    //     // ];
+    //     $post = Post::findOrFail($id);
+    //     if($post->slug != $slug){
+    //         return to_route('blog.show',['slug' => $post->slug, 'id' => $post->id]);
+    //     }
+    //     return $post;
 
-        return $posts;
-
-        // return [
-        //     "link" => \route('blog.show', ['slug' => 'article', 'id' => 13]),
-        // ];
-    })->name('index');
-
-    Route::get('/{slug}-{id}', function (string $slug, string $id, $request) {
-
-        // return [
-        //     "slug" => $slug,
-        //     "id" => $id,
-        //     "name" => $request->input("name"),
-        // ];
-        $post = Post::findOrFail($id);
-        if($post->slug != $slug){
-            return to_route('blog.show',['slug' => $post->slug, 'id' => $post->id]);
-        }
-        return $post;
-        
-    })->where([
-        'id' => '[0-9]+',
-        'slug' => '[a-z0-9\-]+'
-    ])->name('show');
+    // })->where([
+    //     'id' => '[0-9]+',
+    //     'slug' => '[a-z0-9\-]+'
+    // ])->name('show');
+    Route::get('/{slug}-{id}', 'show')->name('show');
 });
 
 
